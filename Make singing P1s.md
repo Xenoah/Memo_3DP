@@ -1,6 +1,62 @@
+参考にしたサイト
+[text](https://myounakodawari.com/archives/1019)
+
+## P1SでA1 miniみたいな音を出す方法
+
+
+A1 miniの「ピロリ♪」系の音は、A1 mini側で公式に扱われている機能（MIDI→G-code化のガイドあり）です。ブログ記事でも、公式の「MIDI to A1 mini User Guide」が紹介されています。
+
+一方で P1Sは標準ではA1 miniみたいな完了音が出ない という報告が多く、P1Sユーザーが「A1 miniの終了解音がない」と言っている投稿もあります。
+
+
+なので、P1Sでやる場合は 「Bambu StudioのMachine G-codeに音用コマンドを入れて、動けばラッキー」 という実験寄りになります。ファーム側で無視される可能性があります。
+
+仕組みの要点
+
+A1系の音は、コミュニティ情報では スピーカーではなくモーターを可聴域で振動させて鳴らしている 方式です。なので「電子音」というより、プリンタが自分で歌ってる感じ。工業機械のくせに芸達者。
+
+A1 miniの開始G-code例には、実際に M1006 系の音コマンドが並んでいます。
+
+
+# P1Sで試す方法（実験）
+1) Bambu StudioでMachine G-code編集画面を開く
+
+Redditの手順説明でも、Bambu系は以下の場所に入れる流れです。
+
+Printer Settings
+
+Machine G-code タブ
+
+該当のG-code欄（Start / End など）を編集
+
+という導線。
+
+
+# machine_end_gcode か machine_start_gcode に音コマンドを入れる
+
+A1 miniの開始G-codeには、音ブロックとしてこんな流れが入っています（要点だけ）:
+
+M17
+M400 S1
+M1006 S1
+; M1006 ...（音階・長さの並び）
+M1006 W
+M18
+
+M1006 の連続でメロディを作る形です。A1 miniの実例はGistやブログ内にも載っています。
+
+入れる場所のおすすめ
+
+終了音にしたい → machine_end_gcode の最後付近
+
+開始音にしたい → machine_start_gcode の冒頭寄り（ただし初期化処理と干渉しない位置）
+
+
+
+
 こちらはノーマルP1SのGCodeです
 
-##Machine start G-code
+## Machine start G-code
 ```
 ;===== machine: P1S ========================
 ;===== date: 20231107 =====================
@@ -274,7 +330,7 @@ M975 S1 ; turn on mech mode supression
 
 ```
 
-##Machine end G-code
+## Machine end G-code
 ```
 ;===== date: 20230428 =====================
 M400 ; wait for buffer to clear
