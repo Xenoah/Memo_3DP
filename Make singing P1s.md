@@ -1,5 +1,5 @@
 参考にしたサイト
-[text](https://myounakodawari.com/archives/1019)
+[Bambu lab A1 miniの謎機能でアニソン演奏してみた](https://myounakodawari.com/archives/1019)
 
 ## P1SでA1 miniみたいな音を出す方法
 
